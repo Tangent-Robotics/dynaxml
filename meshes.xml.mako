@@ -21,5 +21,6 @@
   ${box_mesh(servo.type+"_body", servo.x_dim, servo.y_dim, servo.z_dim)}
   ${box_mesh(servo.type+"_bracket", servo.x_dim+0.006, 0.002, servo.z_dim)}
   ${box_mesh(servo.type+"_bracket_side", 0.002, servo.bracket_clearance, servo.z_dim)}
+  ${box_mesh(servo.type+"_bracket_side_minimal", 0.002, servo.face_to_axis, servo.face_to_axis)}
 </%def>
 

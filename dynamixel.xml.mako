@@ -5,7 +5,7 @@
 <%def name="servo_start(servo, 
                         name, next_body_name,joint_name,
                         pos = '0 0 0', euler = '0 0 0',
-                        mount = 'standard')">
+                        mount = 'standard', bracket = 'normal')">
 <%
     x_dim = servo.x_dim
     y_dim = servo.y_dim
@@ -31,25 +31,53 @@
   <inertial pos="0 0 0" mass="0.05" diaginertia="1e-5 1e-5 1e-5"/>
   <joint type="hinge" name="${joint_name}" axis="1 0 0" limited="true" range="${lower_joint_limit} ${upper_joint_limit}"/>  
 % if use_primitives:
-  <geom name="${name}_bracket_1" type="box" size="${axis_size/2.0} ${bracket_width/2.0} ${z_dim/2.0}" pos="0 ${axis_to_next_body-bracket_width/2.0} 0" rgba=".25 .25 .25 1"/>
-  <geom name="${name}_bracket_2" type="box" size="${bracket_width/2.0} ${bracket_clearance/2.0} ${z_dim/2.0}" pos="${axis_size/2.0-bracket_width/2.0} ${axis_to_next_body/2.0} 0" rgba=".25 .25 .25 1"/>
-  <geom name="${name}_bracket_3" type="box" size="${bracket_width/2.0} ${bracket_clearance/2.0} ${z_dim/2.0}" pos="${-(axis_size/2.0-bracket_width/2.0)} ${axis_to_next_body/2.0} 0" rgba=".25 .25 .25 1"/>
+  % if bracket == "normal":
+    <geom name="${name}_bracket_1" type="box" size="${axis_size/2.0} ${bracket_width/2.0} ${z_dim/2.0}" pos="0 ${axis_to_next_body-bracket_width/2.0} 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_bracket_2" type="box" size="${bracket_width/2.0} ${bracket_clearance/2.0} ${z_dim/2.0}" pos="${axis_size/2.0-bracket_width/2.0} ${axis_to_next_body/2.0} 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_bracket_3" type="box" size="${bracket_width/2.0} ${bracket_clearance/2.0} ${z_dim/2.0}" pos="${-(axis_size/2.0-bracket_width/2.0)} ${axis_to_next_body/2.0} 0" rgba=".25 .25 .25 1"/>
+  % elif bracket == "minimal":
+    <geom name="${name}_bracket_2" type="box" size="${bracket_width/2.0} ${face_to_axis/2.0} ${face_to_axis/2.0}" pos="${axis_size/2.0-bracket_width/2.0} 0 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_bracket_3" type="box" size="${bracket_width/2.0} ${face_to_axis/2.0} ${face_to_axis/2.0}" pos="${-(axis_size/2.0-bracket_width/2.0)} 0 0" rgba=".25 .25 .25 1"/>
+  % else:
+    <!-- Unsupported bracket type-->
+  % endif
 % else:
-  <geom name="${name}_bracket" type="mesh" mesh="${mesh}_bracket" pos="0 ${axis_to_next_body-.001} 0"/>
-  <geom name="${name}_bracket_side1" type="mesh" mesh="${mesh}_bracket_side" pos="${ axis_size/2.0 - 0.001} ${axis_to_next_body/2.0} 0"/>
-  <geom name="${name}_bracket_side2" type="mesh" mesh="${mesh}_bracket_side" pos="${-axis_size/2.0 + 0.001} ${axis_to_next_body/2.0} 0"/>
+  % if bracket == "normal":
+    <geom name="${name}_bracket" type="mesh" mesh="${mesh}_bracket" pos="0 ${axis_to_next_body-.001} 0"/>
+    <geom name="${name}_bracket_side1" type="mesh" mesh="${mesh}_bracket_side" pos="${ axis_size/2.0 - 0.001} ${axis_to_next_body/2.0} 0"/>
+    <geom name="${name}_bracket_side2" type="mesh" mesh="${mesh}_bracket_side" pos="${-axis_size/2.0 + 0.001} ${axis_to_next_body/2.0} 0"/>
+  % elif bracket == "minimal":
+    <geom name="${name}_bracket_side1" type="mesh" mesh="${mesh}_bracket_side_minimal" pos="${ axis_size/2.0 - 0.001} 0 0"/>
+    <geom name="${name}_bracket_side2" type="mesh" mesh="${mesh}_bracket_side_minimal" pos="${-axis_size/2.0 + 0.001} 0 0"/>
+  % else:
+    <!-- Unsupported bracket type-->
   %endif
+%endif
   <body name="${next_body_name}" pos="0 ${axis_to_next_body} 0">
 % elif mount == "flipped":
 <body name="${name}_bracket" pos="${pos}" euler="${euler}">
 % if use_primitives:
-  <geom name="${name}_prev_bracket_1" type="box" size="${axis_size/2.0} ${bracket_width/2.0} ${z_dim/2.0}" pos="0 ${bracket_width/2.0} 0" rgba=".25 .25 .25 1"/>
-  <geom name="${name}_prev_bracket_2" type="box" size="${bracket_width/2.0} ${bracket_clearance/2.0} ${z_dim/2.0}" pos="${axis_size/2.0-bracket_width/2.0} ${bracket_clearance/2.0} 0" rgba=".25 .25 .25 1"/>
-  <geom name="${name}_prev_bracket_3" type="box" size="${bracket_width/2.0} ${bracket_clearance/2.0} ${z_dim/2.0}" pos="${-(axis_size/2.0-bracket_width/2.0)} ${bracket_clearance/2.0} 0" rgba=".25 .25 .25 1"/>
+  % if bracket == "normal":
+    <geom name="${name}_prev_bracket_1" type="box" size="${axis_size/2.0} ${bracket_width/2.0} ${z_dim/2.0}" pos="0 ${bracket_width/2.0} 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_prev_bracket_2" type="box" size="${bracket_width/2.0} ${bracket_clearance/2.0} ${z_dim/2.0}" pos="${axis_size/2.0-bracket_width/2.0} ${bracket_clearance/2.0} 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_prev_bracket_3" type="box" size="${bracket_width/2.0} ${bracket_clearance/2.0} ${z_dim/2.0}" pos="${-(axis_size/2.0-bracket_width/2.0)} ${bracket_clearance/2.0} 0" rgba=".25 .25 .25 1"/>
+  % elif bracket == "minimal":
+    <geom name="${name}_prev_bracket_2" type="box" size="${bracket_width/2.0} ${face_to_axis/2.0} ${face_to_axis/2.0}" pos="${axis_size/2.0-bracket_width/2.0} 0 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_prev_bracket_3" type="box" size="${bracket_width/2.0} ${face_to_axis/2.0} ${face_to_axis/2.0}" pos="${-(axis_size/2.0-bracket_width/2.0)} 0 0" rgba=".25 .25 .25 1"/>
+  % else:
+    <!-- Unsupported bracket type-->
+  %endif
 % else:
-  <geom name="${name}_bracket" type="mesh" mesh="${mesh}_bracket" pos="0 .001 0"/>
-  <geom name="${name}_bracket_side1" type="mesh" mesh="${mesh}_bracket_side" pos="${ axis_size/2.0 - 0.001} ${axis_to_next_body/2.0} 0"/>
-  <geom name="${name}_bracket_side2" type="mesh" mesh="${mesh}_bracket_side" pos="${-axis_size/2.0 + 0.001} ${axis_to_next_body/2.0} 0"/>
+  % if bracket == "normal":
+    <geom name="${name}_bracket" type="mesh" mesh="${mesh}_bracket" pos="0 .001 0"/>
+    <geom name="${name}_bracket_side1" type="mesh" mesh="${mesh}_bracket_side" pos="${ axis_size/2.0 - 0.001} ${axis_to_next_body/2.0} 0"/>
+    <geom name="${name}_bracket_side2" type="mesh" mesh="${mesh}_bracket_side" pos="${-axis_size/2.0 + 0.001} ${axis_to_next_body/2.0} 0"/>
+  % elif bracket == "minimal":
+    <geom name="${name}_bracket_side1" type="mesh" mesh="${mesh}_bracket_side_minimal" pos="${ axis_size/2.0 - 0.001} 0 0"/>
+    <geom name="${name}_bracket_side2" type="mesh" mesh="${mesh}_bracket_side_minimal" pos="${-axis_size/2.0 + 0.001} 0 0"/>
+  % else:
+    <!-- Unsupported bracket type-->
+  % endif
 % endif
 <body name="${name}_body" pos="0 ${axis_to_next_body} 0" euler="0 0 0" >
   <joint type="hinge" name="${joint_name}" axis="1 0 0" limited="true" range="${lower_joint_limit} ${upper_joint_limit}"/>  

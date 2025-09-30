@@ -34,8 +34,8 @@
         <!-- a "flipped" servo, also turned 90 degrees-->
         ${dynamixel.servo_start(xm540, name="servo2",next_body_name="link2",joint_name="joint2", mount="flipped", euler="0 90 0")}
 
-          <!-- a regular servo, but mounted sideways-->
-          ${dynamixel.servo_start(xm430, "servo3", "link3", "joint3", pos="0 .01425 -0.015", euler="90 0 0")}
+          <!-- a regular servo, but mounted sideways and with no bracket-->
+          ${dynamixel.servo_start(xm430, "servo3", "link3", "joint3", pos="0 .01425 -0.015", euler="90 0 0", bracket="minimal")}
 
             <!-- a dual servo -->
             ${dynamixel.dual_servo_start(dualxc430half, "servo4", "joint4", "joint5", "link5")}
