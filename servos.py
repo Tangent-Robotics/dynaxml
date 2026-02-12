@@ -11,6 +11,8 @@ class Servo:
     bracket_clearance: float
     lower_joint_limit: float
     upper_joint_limit: float
+    joint_offset_y: float = 0
+    joint_offset_z: float = 0
 
 xc330 = Servo(
     type = "xc330",

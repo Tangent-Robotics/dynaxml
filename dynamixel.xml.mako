@@ -1,5 +1,5 @@
 <%!
-    use_primitives = False
+    use_primitives = True
 %>
 
 <%def name="servo_start(servo, 
@@ -12,11 +12,14 @@
     z_dim = servo.z_dim
     face_to_axis = servo.face_to_axis
     bracket_clearance = servo.bracket_clearance
+    joint_offset_y = servo.joint_offset_y
+    joint_offset_z = servo.joint_offset_z
     mesh = servo.type
     lower_joint_limit = servo.lower_joint_limit
     upper_joint_limit = servo.upper_joint_limit
     axis_size = x_dim + 0.006
     bracket_width = 0.002
+    fourbar_bearing_radius = 0.006
     axis_to_next_body = bracket_clearance
 %>
 % if mount == "standard":
@@ -27,7 +30,7 @@
 % else:
 <geom name="${name}_body" type="mesh" mesh="${mesh}_body" pos="0 ${y_dim/2.0} 0" rgba="0.5 0.5 0.75 1"/>
 % endif
-<body name="${name}_bracket" pos="0 ${y_dim-face_to_axis} 0" euler="0 0 0" >
+<body name="${name}_bracket" pos="0 ${y_dim-face_to_axis+joint_offset_y} ${joint_offset_z}" euler="0 0 0" >
   <inertial pos="0 0 0" mass="0.05" diaginertia="1e-5 1e-5 1e-5"/>
   <joint type="hinge" name="${joint_name}" axis="1 0 0" limited="true" range="${lower_joint_limit} ${upper_joint_limit}"/>  
 % if use_primitives:
@@ -38,6 +41,9 @@
   % elif bracket == "minimal":
     <geom name="${name}_bracket_2" type="box" size="${bracket_width/2.0} ${face_to_axis/2.0} ${face_to_axis/2.0}" pos="${axis_size/2.0-bracket_width/2.0} 0 0" rgba=".25 .25 .25 1"/>
     <geom name="${name}_bracket_3" type="box" size="${bracket_width/2.0} ${face_to_axis/2.0} ${face_to_axis/2.0}" pos="${-(axis_size/2.0-bracket_width/2.0)} 0 0" rgba=".25 .25 .25 1"/>
+  % elif bracket == "fourbar":
+    <geom name="${name}_bracket_1" type="cylinder" size="${fourbar_bearing_radius} ${bracket_width}" pos="${axis_size/2.0-bracket_width/2.0} 0 0" euler="0 90 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_bracket_2" type="cylinder" size="${fourbar_bearing_radius} ${bracket_width}" pos="${-(axis_size/2.0-bracket_width/2.0)} 0 0" euler="0 90 0" rgba=".25 .25 .25 1"/>
   % else:
     <!-- Unsupported bracket type-->
   % endif
@@ -53,7 +59,7 @@
     <!-- Unsupported bracket type-->
   %endif
 %endif
-  <body name="${next_body_name}" pos="0 ${axis_to_next_body} 0">
+<body name="${next_body_name}" pos="0 ${axis_to_next_body} 0">
 % elif mount == "flipped":
 <body name="${name}_bracket" pos="${pos}" euler="${euler}">
 % if use_primitives:
