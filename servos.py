@@ -13,6 +13,8 @@ class Servo:
     upper_joint_limit: float
     joint_offset_y: float = 0
     joint_offset_z: float = 0
+    front_padding: float = 0
+    top_padding: float = 0
 
 xc330 = Servo(
     type = "xc330",
