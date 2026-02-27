@@ -63,6 +63,9 @@
   % elif bracket == "minimal":
     <geom name="${name}_bracket_side1" type="mesh" mesh="${mesh}_bracket_side_minimal" pos="${ axis_size/2.0 - 0.001} 0 0"/>
     <geom name="${name}_bracket_side2" type="mesh" mesh="${mesh}_bracket_side_minimal" pos="${-axis_size/2.0 + 0.001} 0 0"/>
+  % elif bracket == "fourbar":
+    <geom name="${name}_bracket_1" type="mesh" mesh="${mesh}_bracket_side_fourbar" pos="${axis_size/2.0-bracket_width/2.0} 0 0" />
+    <geom name="${name}_bracket_2" type="mesh" mesh="${mesh}_bracket_side_fourbar" pos="${-(axis_size/2.0-bracket_width/2.0)} 0 0" />
   % else:
     <!-- Unsupported bracket type-->
   %endif
@@ -118,7 +121,8 @@
 
 <%def name="dual_servo_hetero_start(servo1, servo2, 
                                     name,joint1_name,joint2_name,next_body_name,
-                                    pos='0 0 0', euler='0 0 0', servo_to_servo='standard')">
+                                    pos='0 0 0', euler='0 0 0', servo_to_servo='standard',
+                                    prox_bracket='normal', dist_bracket='minimal')">
 <%
     first_name = name + "first"
     bridge_name = name + "bridge"
@@ -127,17 +131,17 @@
 ${servo_start(servo1,
               first_name, bridge_name, joint1_name, 
               pos, euler,                       
-              "flipped", "fourbar")}
+              "flipped", prox_bracket)}
 % if servo_to_servo == "standard":
 ${servo_start(servo2,
               second_name, next_body_name, joint2_name, 
               "0 0 0", "180 90 0",                      
-              "standard")}
+              "standard", dist_bracket)}
 % elif servo_to_servo == "flipped":
 ${servo_start(servo2,
               second_name, next_body_name, joint2_name, 
               "0 0 0", "180 -90 0",                      
-              "standard")}
+              "standard",dist_bracket)}
 % else:
 <!-- Unsupported servo_to_servo ${servo_to_servo} requested-->  
 % endif
@@ -146,10 +150,11 @@ ${servo_start(servo2,
 
 <%def name="dual_servo_start(servo, 
                              name,joint1_name,joint2_name,next_body_name,
-                             pos='0 0 0', euler='0 0 0', servo_to_servo='standard')">
+                             pos='0 0 0', euler='0 0 0', servo_to_servo='standard', 
+                             prox_bracket='normal', dist_bracket='normal')">
 ${dual_servo_hetero_start(servo, servo, 
                           name, joint1_name, joint2_name, next_body_name,
-                          pos, euler, servo_to_servo)}
+                          pos, euler, servo_to_servo, prox_bracket, dist_bracket)}
 </%def>
 
 <%def name="dual_servo_end()">
