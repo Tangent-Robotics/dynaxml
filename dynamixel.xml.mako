@@ -1,5 +1,5 @@
 <%!
-    use_primitives = True
+    use_primitives = False
 %>
 
 <%def name="servo_start(servo, 
@@ -95,6 +95,9 @@
   % elif bracket == "minimal":
     <geom name="${name}_bracket_side1" type="mesh" mesh="${mesh}_bracket_side_minimal" pos="${ axis_size/2.0 - 0.001} ${-axis_to_next_body} 0"/>
     <geom name="${name}_bracket_side2" type="mesh" mesh="${mesh}_bracket_side_minimal" pos="${-axis_size/2.0 + 0.001} ${-axis_to_next_body} 0"/>
+  % elif bracket == "fourbar":
+    <geom name="${name}_bracket_1" type="mesh" mesh="${mesh}_bracket_side_fourbar" pos="${axis_size/2.0-bracket_width/2.0} ${-bracket_clearance} 0" />
+    <geom name="${name}_bracket_2" type="mesh" mesh="${mesh}_bracket_side_fourbar" pos="${-(axis_size/2.0-bracket_width/2.0)} ${-bracket_clearance} 0" />
   % else:
     <!-- Unsupported bracket type-->
   % endif
