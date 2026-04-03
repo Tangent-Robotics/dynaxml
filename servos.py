@@ -55,7 +55,7 @@ dualxc430 = Servo (
     y_dim = 0.0465,
     z_dim = 0.0360,
     face_to_axis = 0.01125,
-    bracket_clearance = 0.028,
+    bracket_clearance = 0.025,
     lower_joint_limit = -120,
     upper_joint_limit = 120,
 )
