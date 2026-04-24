@@ -18,7 +18,8 @@
     lower_joint_limit = servo.lower_joint_limit
     upper_joint_limit = servo.upper_joint_limit
     axis_size = x_dim + 0.006
-    bracket_width = 0.002
+    bracket_thickness = 0.002
+    bracket_width = servo.bracket_width
     fourbar_bearing_radius = 0.006
     axis_to_next_body = bracket_clearance
     front_padding = servo.front_padding
@@ -43,15 +44,15 @@
   <joint type="hinge" name="${joint_name}" axis="1 0 0" limited="true" range="${lower_joint_limit} ${upper_joint_limit}"/>  
 % if use_primitives:
   % if bracket == "normal":
-    <geom name="${name}_bracket_1" type="box" size="${axis_size/2.0} ${bracket_width/2.0} ${z_dim/2.0}" pos="0 ${axis_to_next_body-bracket_width/2.0} 0" rgba=".25 .25 .25 1"/>
-    <geom name="${name}_bracket_2" type="box" size="${bracket_width/2.0} ${bracket_clearance/2.0} ${z_dim/2.0}" pos="${axis_size/2.0-bracket_width/2.0} ${axis_to_next_body/2.0} 0" rgba=".25 .25 .25 1"/>
-    <geom name="${name}_bracket_3" type="box" size="${bracket_width/2.0} ${bracket_clearance/2.0} ${z_dim/2.0}" pos="${-(axis_size/2.0-bracket_width/2.0)} ${axis_to_next_body/2.0} 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_bracket_1" type="box" size="${axis_size/2.0} ${bracket_thickness/2.0} ${bracket_width/2.0}" pos="0 ${axis_to_next_body-bracket_thickness/2.0} 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_bracket_2" type="box" size="${bracket_thickness/2.0} ${bracket_clearance/2.0} ${bracket_width/2.0}" pos="${axis_size/2.0-bracket_thickness/2.0} ${axis_to_next_body/2.0} 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_bracket_3" type="box" size="${bracket_thickness/2.0} ${bracket_clearance/2.0} ${bracket_width/2.0}" pos="${-(axis_size/2.0-bracket_thickness/2.0)} ${axis_to_next_body/2.0} 0" rgba=".25 .25 .25 1"/>
   % elif bracket == "minimal":
-    <geom name="${name}_bracket_2" type="box" size="${bracket_width/2.0} ${face_to_axis/2.0} ${face_to_axis/2.0}" pos="${axis_size/2.0-bracket_width/2.0} 0 0" rgba=".25 .25 .25 1"/>
-    <geom name="${name}_bracket_3" type="box" size="${bracket_width/2.0} ${face_to_axis/2.0} ${face_to_axis/2.0}" pos="${-(axis_size/2.0-bracket_width/2.0)} 0 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_bracket_2" type="box" size="${bracket_thickness/2.0} ${face_to_axis/2.0} ${face_to_axis/2.0}" pos="${axis_size/2.0-bracket_thickness/2.0} 0 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_bracket_3" type="box" size="${bracket_thickness/2.0} ${face_to_axis/2.0} ${face_to_axis/2.0}" pos="${-(axis_size/2.0-bracket_thickness/2.0)} 0 0" rgba=".25 .25 .25 1"/>
   % elif bracket == "fourbar":
-    <geom name="${name}_bracket_1" type="cylinder" size="${fourbar_bearing_radius} ${bracket_width}" pos="${axis_size/2.0-bracket_width/2.0} 0 0" euler="0 90 0" rgba=".25 .25 .25 1"/>
-    <geom name="${name}_bracket_2" type="cylinder" size="${fourbar_bearing_radius} ${bracket_width}" pos="${-(axis_size/2.0-bracket_width/2.0)} 0 0" euler="0 90 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_bracket_1" type="cylinder" size="${fourbar_bearing_radius} ${bracket_thickness}" pos="${axis_size/2.0-bracket_thickness/2.0} 0 0" euler="0 90 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_bracket_2" type="cylinder" size="${fourbar_bearing_radius} ${bracket_thickness}" pos="${-(axis_size/2.0-bracket_thickness/2.0)} 0 0" euler="0 90 0" rgba=".25 .25 .25 1"/>
   % else:
     <!-- Unsupported bracket type-->
   % endif
@@ -64,8 +65,8 @@
     <geom name="${name}_bracket_side1" type="mesh" mesh="${mesh}_bracket_side_minimal" pos="${ axis_size/2.0 - 0.001} 0 0"/>
     <geom name="${name}_bracket_side2" type="mesh" mesh="${mesh}_bracket_side_minimal" pos="${-axis_size/2.0 + 0.001} 0 0"/>
   % elif bracket == "fourbar":
-    <geom name="${name}_bracket_1" type="mesh" mesh="${mesh}_bracket_side_fourbar" pos="${axis_size/2.0-bracket_width/2.0} 0 0" />
-    <geom name="${name}_bracket_2" type="mesh" mesh="${mesh}_bracket_side_fourbar" pos="${-(axis_size/2.0-bracket_width/2.0)} 0 0" />
+    <geom name="${name}_bracket_1" type="mesh" mesh="${mesh}_bracket_side_fourbar" pos="${axis_size/2.0-bracket_thickness/2.0} 0 0" />
+    <geom name="${name}_bracket_2" type="mesh" mesh="${mesh}_bracket_side_fourbar" pos="${-(axis_size/2.0-bracket_thickness/2.0)} 0 0" />
   % else:
     <!-- Unsupported bracket type-->
   %endif
@@ -75,15 +76,15 @@
 <body name="${name}_bracket" pos="${pos}" euler="${euler}">
 % if use_primitives:
   % if bracket == "normal":
-    <geom name="${name}_prev_bracket_1" type="box" size="${axis_size/2.0} ${bracket_width/2.0} ${z_dim/2.0}" pos="0 ${-bracket_width/2.0} 0" rgba=".25 .25 .25 1"/>
-    <geom name="${name}_prev_bracket_2" type="box" size="${bracket_width/2.0} ${bracket_clearance/2.0} ${z_dim/2.0}" pos="${axis_size/2.0-bracket_width/2.0} ${-bracket_clearance/2.0} 0" rgba=".25 .25 .25 1"/>
-    <geom name="${name}_prev_bracket_3" type="box" size="${bracket_width/2.0} ${bracket_clearance/2.0} ${z_dim/2.0}" pos="${-(axis_size/2.0-bracket_width/2.0)} ${-bracket_clearance/2.0} 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_prev_bracket_1" type="box" size="${axis_size/2.0} ${bracket_thickness/2.0} ${bracket_width/2.0}" pos="0 ${-bracket_thickness/2.0} 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_prev_bracket_2" type="box" size="${bracket_thickness/2.0} ${bracket_clearance/2.0} ${bracket_width/2.0}" pos="${axis_size/2.0-bracket_thickness/2.0} ${-bracket_clearance/2.0} 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_prev_bracket_3" type="box" size="${bracket_thickness/2.0} ${bracket_clearance/2.0} ${bracket_width/2.0}" pos="${-(axis_size/2.0-bracket_thickness/2.0)} ${-bracket_clearance/2.0} 0" rgba=".25 .25 .25 1"/>
   % elif bracket == "minimal":
-    <geom name="${name}_prev_bracket_2" type="box" size="${bracket_width/2.0} ${face_to_axis/2.0} ${face_to_axis/2.0}" pos="${axis_size/2.0-bracket_width/2.0} 0 0" rgba=".25 .25 .25 1"/>
-    <geom name="${name}_prev_bracket_3" type="box" size="${bracket_width/2.0} ${face_to_axis/2.0} ${face_to_axis/2.0}" pos="${-(axis_size/2.0-bracket_width/2.0)} 0 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_prev_bracket_2" type="box" size="${bracket_thickness/2.0} ${face_to_axis/2.0} ${face_to_axis/2.0}" pos="${axis_size/2.0-bracket_thickness/2.0} 0 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_prev_bracket_3" type="box" size="${bracket_thickness/2.0} ${face_to_axis/2.0} ${face_to_axis/2.0}" pos="${-(axis_size/2.0-bracket_thickness/2.0)} 0 0" rgba=".25 .25 .25 1"/>
   % elif bracket == "fourbar":
-    <geom name="${name}_prev_bracket_1" type="cylinder" size="${fourbar_bearing_radius} ${bracket_width}" pos="${axis_size/2.0-bracket_width/2.0} ${-bracket_clearance} 0" euler="0 90 0" rgba=".25 .25 .25 1"/>
-    <geom name="${name}_prev_bracket_2" type="cylinder" size="${fourbar_bearing_radius} ${bracket_width}" pos="${-(axis_size/2.0-bracket_width/2.0)} ${-bracket_clearance} 0" euler="0 90 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_prev_bracket_1" type="cylinder" size="${fourbar_bearing_radius} ${bracket_thickness}" pos="${axis_size/2.0-bracket_thickness/2.0} ${-bracket_clearance} 0" euler="0 90 0" rgba=".25 .25 .25 1"/>
+    <geom name="${name}_prev_bracket_2" type="cylinder" size="${fourbar_bearing_radius} ${bracket_thickness}" pos="${-(axis_size/2.0-bracket_thickness/2.0)} ${-bracket_clearance} 0" euler="0 90 0" rgba=".25 .25 .25 1"/>
   % else:
     <!-- Unsupported bracket type-->
   %endif
@@ -96,8 +97,8 @@
     <geom name="${name}_bracket_side1" type="mesh" mesh="${mesh}_bracket_side_minimal" pos="${ axis_size/2.0 - 0.001} ${-axis_to_next_body} 0"/>
     <geom name="${name}_bracket_side2" type="mesh" mesh="${mesh}_bracket_side_minimal" pos="${-axis_size/2.0 + 0.001} ${-axis_to_next_body} 0"/>
   % elif bracket == "fourbar":
-    <geom name="${name}_bracket_1" type="mesh" mesh="${mesh}_bracket_side_fourbar" pos="${axis_size/2.0-bracket_width/2.0} ${-bracket_clearance} 0" />
-    <geom name="${name}_bracket_2" type="mesh" mesh="${mesh}_bracket_side_fourbar" pos="${-(axis_size/2.0-bracket_width/2.0)} ${-bracket_clearance} 0" />
+    <geom name="${name}_bracket_1" type="mesh" mesh="${mesh}_bracket_side_fourbar" pos="${axis_size/2.0-bracket_thickness/2.0} ${-bracket_clearance} 0" />
+    <geom name="${name}_bracket_2" type="mesh" mesh="${mesh}_bracket_side_fourbar" pos="${-(axis_size/2.0-bracket_thickness/2.0)} ${-bracket_clearance} 0" />
   % else:
     <!-- Unsupported bracket type-->
   % endif

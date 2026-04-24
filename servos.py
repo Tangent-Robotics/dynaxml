@@ -9,6 +9,7 @@ class Servo:
     z_dim: float
     face_to_axis: float
     bracket_clearance: float
+    bracket_width: float
     lower_joint_limit: float
     upper_joint_limit: float
     joint_offset_y: float = 0
@@ -23,6 +24,7 @@ xc330 = Servo(
     z_dim = 0.020,
     face_to_axis = 0.0095,
     bracket_clearance = 0.017,
+    bracket_width = 0.020,
     lower_joint_limit = -120,
     upper_joint_limit = 120,
 )
@@ -34,6 +36,7 @@ xm430 = Servo(
     z_dim = 0.0285,
     face_to_axis = 0.01125,
     bracket_clearance = 0.028,
+    bracket_width = 0.0285,
     lower_joint_limit = -120,
     upper_joint_limit = 120,
 )
@@ -45,6 +48,7 @@ xm540 = Servo (
     z_dim = 0.0335,
     face_to_axis = 0.01375,
     bracket_clearance = 0.032,
+    bracket_width = 0.0335,
     lower_joint_limit = -120,
     upper_joint_limit = 120,
 )
@@ -56,6 +60,7 @@ dualxc430 = Servo (
     z_dim = 0.0360,
     face_to_axis = 0.01125,
     bracket_clearance = 0.025,
+    bracket_width = 0.0360,
     lower_joint_limit = -120,
     upper_joint_limit = 120,
 )
