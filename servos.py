@@ -29,6 +29,18 @@ xc330 = Servo(
     upper_joint_limit = 120,
 )
 
+xm335 = Servo(
+    type = "xm335",
+    x_dim = 0.022,
+    y_dim = 0.035,
+    z_dim = 0.019,
+    face_to_axis = 0.0095,
+    bracket_clearance = 0.012,
+    bracket_width = 0.020,
+    lower_joint_limit = -120,
+    upper_joint_limit = 120,
+)
+
 xm430 = Servo(
     type = "xm430",
     x_dim = 0.0340,

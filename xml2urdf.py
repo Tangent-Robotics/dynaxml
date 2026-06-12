@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import sys
 import copy
+import math
 import os
 import xml.etree.ElementTree as ET
 from mjcf_urdf_simple_converter import convert
@@ -73,6 +74,18 @@ def process_urdf(urdf_file, package_name, root_link_name):
                 joint.set("name", jname.replace("world", root_link_name))
 
         print(f"Updated {updated} joint parent link reference(s) from 'world' → '{root_link_name}'")
+
+    print("Rounding joint position limits to 2 decimal places")
+    for joint in root.findall("joint"):
+        limit = joint.find("limit")
+        if limit is not None:
+            for attr, fn in (("lower", math.ceil), ("upper", math.floor)):
+                if attr in limit.attrib:
+                    try:
+                        val = round(fn(float(limit.attrib[attr]) * 100) / 100, 2)
+                        limit.attrib[attr] = f"{val:.2f}"
+                    except ValueError:
+                        print(f"[WARN] Joint '{joint.attrib['name']}': {attr} '{limit.attrib[attr]}' is not a number, skipping")
 
     print("Ensuring all joint velocity limits are written as floats")
     for joint in root.findall("joint"):
